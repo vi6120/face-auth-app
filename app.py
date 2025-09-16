@@ -78,32 +78,21 @@ def compare_faces(features1, features2, threshold=0.8):
     return correlation > threshold
 
 def capture_face():
-    """Capture face from webcam"""
-    cap = cv2.VideoCapture(0)
+    """Capture face using Streamlit camera input"""
+    camera_input = st.camera_input("📸 Take a photo")
     
-    col1, col2 = st.columns(2)
+    if camera_input is not None:
+        # Convert to OpenCV format
+        bytes_data = camera_input.getvalue()
+        cv2_img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
+        
+        features = extract_face_features(cv2_img)
+        if features:
+            st.success("Face captured successfully!")
+            return features
+        else:
+            st.error("No face detected. Please try again.")
     
-    with col1:
-        stframe = st.empty()
-    
-    with col2:
-        if st.button("📸 Capture Face", type="primary"):
-            ret, frame = cap.read()
-            if ret:
-                features = extract_face_features(frame)
-                if features:
-                    cap.release()
-                    st.success("Face captured successfully!")
-                    return features
-                else:
-                    st.error("No face detected. Please try again.")
-    
-    # Show live video feed
-    ret, frame = cap.read()
-    if ret:
-        stframe.image(frame, channels="BGR", width=300)
-    
-    cap.release()
     return None
 
 def signup():
