@@ -4,12 +4,7 @@ import numpy as np
 import json
 import bcrypt
 import os
-import mediapipe as mp
 from datetime import datetime
-
-# Initialize MediaPipe Face Detection
-mp_face_detection = mp.solutions.face_detection
-mp_drawing = mp.solutions.drawing_utils
 
 # Initialize session state
 if 'authenticated' not in st.session_state:
@@ -38,27 +33,16 @@ def verify_password(password, hashed):
     return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
 def extract_face_features(image):
-    """Extract simple face features using MediaPipe"""
-    with mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) as face_detection:
-        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        results = face_detection.process(rgb_image)
-        
-        if results.detections:
-            detection = results.detections[0]
-            bbox = detection.location_data.relative_bounding_box
-            
-            # Extract face region
-            h, w, _ = image.shape
-            x = int(bbox.xmin * w)
-            y = int(bbox.ymin * h)
-            width = int(bbox.width * w)
-            height = int(bbox.height * h)
-            
-            face_roi = image[y:y+height, x:x+width]
-            if face_roi.size > 0:
-                # Simple feature: resize and flatten face region
-                face_resized = cv2.resize(face_roi, (64, 64))
-                return face_resized.flatten().tolist()
+    """Extract simple face features using OpenCV"""
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    
+    if len(faces) > 0:
+        x, y, w, h = faces[0]
+        face_roi = image[y:y+h, x:x+w]
+        face_resized = cv2.resize(face_roi, (64, 64))
+        return face_resized.flatten().tolist()
     return None
 
 def compare_faces(features1, features2, threshold=0.8):
