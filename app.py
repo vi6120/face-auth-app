@@ -18,13 +18,21 @@ DATA_FILE = 'users.json'
 
 def load_users():
     if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'r') as f:
-            return json.load(f)
+        try:
+            with open(DATA_FILE, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            st.error(f"Error loading users: {e}")
+            return {}
     return {}
 
 def save_users(users):
-    with open(DATA_FILE, 'w') as f:
-        json.dump(users, f)
+    try:
+        with open(DATA_FILE, 'w') as f:
+            json.dump(users, f, indent=2)
+        st.success(f"Data saved to {DATA_FILE}")
+    except Exception as e:
+        st.error(f"Error saving users: {e}")
 
 def hash_password(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -109,6 +117,7 @@ def signup():
             }
             save_users(users)
             st.success(f"✅ Account created! {owner_name} registered as owner.")
+            st.rerun()
 
 def login():
     st.header("🚪 Account Login")
@@ -199,6 +208,12 @@ def manage_members():
 def main():
     st.set_page_config(page_title="Family Face Auth", page_icon="👨👩👧👦", layout="wide")
     st.title("👨👩👧👦 Family Face Recognition")
+    
+    # Debug info
+    users = load_users()
+    st.sidebar.write(f"**Debug:** {len(users)} accounts registered")
+    if users:
+        st.sidebar.write("Accounts:", list(users.keys()))
     
     if st.session_state.authenticated:
         # Account is unlocked
