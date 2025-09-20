@@ -13,7 +13,7 @@ from datetime import datetime
 
 def check_dependencies():
     """Check if all required dependencies are installed"""
-    print("🔍 Checking dependencies...")
+    print(" Checking dependencies...")
     
     required_packages = [
         'streamlit',
@@ -32,57 +32,57 @@ def check_dependencies():
         try:
             if package == 'opencv-python':
                 import cv2
-                print(f"✅ {package}: {cv2.__version__}")
+                print(f" {package}: {cv2.__version__}")
             elif package == 'scikit-learn':
                 import sklearn
-                print(f"✅ {package}: {sklearn.__version__}")
+                print(f" {package}: {sklearn.__version__}")
             else:
                 module = __import__(package)
                 version = getattr(module, '__version__', 'unknown')
-                print(f"✅ {package}: {version}")
+                print(f" {package}: {version}")
         except ImportError:
-            print(f"❌ {package}: NOT INSTALLED")
+            print(f" {package}: NOT INSTALLED")
             missing_packages.append(package)
     
     if missing_packages:
-        print(f"\n⚠️  Missing packages: {', '.join(missing_packages)}")
+        print(f"\n  Missing packages: {', '.join(missing_packages)}")
         print("Install them with: pip install " + " ".join(missing_packages))
         return False
     
-    print("✅ All dependencies are installed!")
+    print(" All dependencies are installed!")
     return True
 
 def check_camera():
     """Test camera functionality"""
-    print("\n📷 Testing camera access...")
+    print("\n Testing camera access...")
     
     try:
         # Try to open the default camera
         cap = cv2.VideoCapture(0)
         
         if not cap.isOpened():
-            print("❌ Cannot access camera (device 0)")
+            print(" Cannot access camera (device 0)")
             return False
         
         # Try to read a frame
         ret, frame = cap.read()
         
         if not ret or frame is None:
-            print("❌ Cannot read from camera")
+            print(" Cannot read from camera")
             cap.release()
             return False
         
-        print(f"✅ Camera working! Frame shape: {frame.shape}")
+        print(f" Camera working! Frame shape: {frame.shape}")
         cap.release()
         return True
         
     except Exception as e:
-        print(f"❌ Camera error: {e}")
+        print(f" Camera error: {e}")
         return False
 
 def check_insightface():
     """Test InsightFace model loading"""
-    print("\n🤖 Testing InsightFace model...")
+    print("\n Testing InsightFace model...")
     
     try:
         from insightface.app import FaceAnalysis
@@ -91,22 +91,22 @@ def check_insightface():
         app = FaceAnalysis(name='buffalo_sc', providers=['CPUExecutionProvider'])
         app.prepare(ctx_id=0, det_size=(240, 240))
         
-        print("✅ InsightFace model loaded successfully!")
+        print(" InsightFace model loaded successfully!")
         
         # Test with a dummy image
         dummy_image = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
         faces = app.get(dummy_image)
         
-        print(f"✅ Model inference test completed (detected {len(faces)} faces in random image)")
+        print(f" Model inference test completed (detected {len(faces)} faces in random image)")
         return True
         
     except Exception as e:
-        print(f"❌ InsightFace error: {e}")
+        print(f" InsightFace error: {e}")
         return False
 
 def check_data_files():
     """Check data file integrity"""
-    print("\n📁 Checking data files...")
+    print("\n Checking data files...")
     
     files_to_check = ['users.json', 'people.json']
     
@@ -115,13 +115,13 @@ def check_data_files():
             try:
                 with open(filename, 'r') as f:
                     data = json.load(f)
-                print(f"✅ {filename}: Valid JSON with {len(data)} entries")
+                print(f"{filename}: Valid JSON with {len(data)} entries")
             except json.JSONDecodeError as e:
-                print(f"❌ {filename}: Invalid JSON - {e}")
+                print(f"{filename}: Invalid JSON - {e}")
             except Exception as e:
-                print(f"❌ {filename}: Error reading file - {e}")
+                print(f"{filename}: Error reading file - {e}")
         else:
-            print(f"ℹ️  {filename}: File doesn't exist (will be created when needed)")
+            print(f"{filename}: File doesn't exist (will be created when needed)")
 
 def check_system_info():
     """Display system information"""
@@ -140,7 +140,7 @@ def check_system_info():
 
 def run_diagnostics():
     """Run all diagnostic checks"""
-    print("🚀 Face Authentication App Diagnostics")
+    print("Face Authentication App Diagnostics")
     print("=" * 50)
     print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
@@ -157,26 +157,26 @@ def run_diagnostics():
         try:
             results[check_name] = check_func()
         except Exception as e:
-            print(f"❌ {check_name} check failed with exception: {e}")
+            print(f"{check_name} check failed with exception: {e}")
             results[check_name] = False
     
     check_system_info()
     
     print("\n" + "=" * 50)
-    print("📊 DIAGNOSTIC SUMMARY:")
+    print("DIAGNOSTIC SUMMARY:")
     
     all_passed = True
     for check_name, passed in results.items():
-        status = "✅ PASS" if passed else "❌ FAIL"
+        status = "PASS" if passed else "FAIL"
         print(f"{check_name}: {status}")
         if not passed:
             all_passed = False
     
     if all_passed:
-        print("\n🎉 All checks passed! Your system should work correctly.")
+        print("\nAll checks passed! Your system should work correctly.")
     else:
-        print("\n⚠️  Some checks failed. Please address the issues above.")
-        print("\nCommon solutions:")
+        print("\n  Some checks failed. Please address the issues above.")
+        print("\n Common solutions:")
         print("- Install missing dependencies: pip install -r requirements.txt")
         print("- Check camera permissions in your browser/system")
         print("- Restart the application")
