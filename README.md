@@ -1,11 +1,11 @@
 # Family Face Recognition App
 
-Multi-user face authentication system where each account can have multiple family/friend members.
+Multi-user face authentication system where each account can have multiple Users.
 
 ## Features
 - **Account Creation**: Create family accounts with owner registration
-- **Member Management**: Add family/friends to accounts
-- **Two-Step Login**: Password unlocks account → face identifies specific member
+- **Member Management**: Add family or friends to accounts
+- **Two-Step Login**: Password unlocks account and the face identifies specific member
 - **Secure Storage**: Hashed passwords, face embeddings only
 
 ## Data Structure
@@ -14,9 +14,9 @@ Multi-user face authentication system where each account can have multiple famil
   "family_account": {
     "password_hash": "xxx",
     "members": [
-      {"name": "Dad", "encoding": [...], "is_owner": true},
-      {"name": "Mom", "encoding": [...], "is_owner": false},
-      {"name": "Sister", "encoding": [...], "is_owner": false}
+      {"name": "XX1", "encoding": [...], "is_owner": true},
+      {"name": "XX2", "encoding": [...], "is_owner": false},
+      {"name": "XX3", "encoding": [...], "is_owner": false}
     ]
   }
 }
@@ -24,7 +24,7 @@ Multi-user face authentication system where each account can have multiple famil
 
 ## Usage
 1. **Create Account**: Account name + password + owner face
-2. **Add Members**: Login → Manage Members → Add family/friends
+2. **Add Members**: Login → Manage Members → Add family or friends
 3. **Login**: Enter password → show face → get identified as specific member
 
 ## Setup
@@ -34,4 +34,6 @@ streamlit run app.py
 ```
 
 ## Deployment
-Push to GitHub → Connect Streamlit Community Cloud → Deploy
+1. Copy this to your Github
+2. Sign into your Streamlit
+3. Deploy the app.py from the github repo on you Streamlit
