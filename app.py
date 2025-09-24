@@ -46,14 +46,14 @@ def display_logs_sidebar():
         st.markdown("---")
         
         # Toggle button for showing/hiding logs
-        if st.button("🔍 Toggle Debug Logs"):
+        if st.button("Toggle Debug Logs"):
             st.session_state.show_logs = not st.session_state.show_logs
         
         if st.session_state.show_logs:
-            st.subheader("📋 Debug Logs")
+            st.subheader("Debug Logs")
             
             # Clear logs button
-            if st.button("🗑️ Clear Logs"):
+            if st.button("Clear Logs"):
                 st.session_state.logs = []
                 st.rerun()
             
@@ -304,10 +304,10 @@ def capture_face():
     """, unsafe_allow_html=True)
     
     # Add instructions for better capture
-    st.info("📸 Position your face clearly in the camera frame and click the capture button")
+    st.info("🀱Position your face clearly in the camera frame and click the capture button")
     
     try:
-        camera_input = st.camera_input("Take a photo", key="face_camera")
+        camera_input = st.camera_input("📷Take a photo", key="face_camera")
         
         if camera_input is not None:
             add_log("Camera input received, processing image")
@@ -348,11 +348,11 @@ def capture_face():
                     features = extract_face_features(cv2_img)
                 
                 if features:
-                    st.success("✅ Face captured and processed successfully!")
+                    st.success("👍 Face captured and processed successfully!")
                     add_log("Face features extracted successfully")
                     return features
                 else:
-                    st.error("❌ No face detected in the image. Please ensure your face is clearly visible and try again.")
+                    st.error("😑 No face detected in the image. Please ensure your face is clearly visible and try again.")
                     add_log("No face features extracted", "WARNING")
                     
             except Exception as e:
