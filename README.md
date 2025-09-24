@@ -1,4 +1,4 @@
-# Family Face Recognition App
+# Face recognition mimicing FaceID
 
 Multi-user face authentication system where each account can have multiple Users.
 
@@ -37,3 +37,6 @@ streamlit run app.py
 1. Copy this to your Github
 2. Sign into your Streamlit
 3. Deploy the app.py from the github repo on you Streamlit
+
+## Disclaimer
+This is for Educational and Learning purpose only
